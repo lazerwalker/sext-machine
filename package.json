@@ -2,7 +2,7 @@
   "name": "Sextbot",
   "version": "0.0.1",
   "dependencies": {
-    "coffee-script": "1.1.2",
+    "coffee-script": "^1.9.1",
     "express": "^4.12.2",
     "nudity-filter": "^0.1.2",
     "twilio": "^1.11.1"
