@@ -31,9 +31,10 @@ app.get '/sms', (req, res) ->
             if req.query["MediaUrl1"]?
                 body = "(I saw you sent multiple photos, but I can only be turned on by one at a time. Resend the others?)"
                 client.sms.messages.create {to, from, body}
-
+    else if to?
+        client.sms.messages.create {to, from, body: "You didn't send me a photo!"}
     else
-        sms = client.sms.messages.create {to, from, body: "You didn't send me a photo!"}
+        res.status(500).send("An error has occured")
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
