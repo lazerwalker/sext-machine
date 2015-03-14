@@ -28,15 +28,16 @@ app.get '/sms', (req, res) ->
                 body = "I'm #{result.confidence}% turned on."
             else
                 body = "I'm not turned on at all."
+
             console.log(result)
             sms = client.sms.messages.create { to, from, body }
+
+            if req.query["MediaUrl1"]?
+                body = "(I saw you sent multiple photos, but I can only be turned on by one at a time. Resend the others?)"
+                client.sms.messages.create {to, from, body}
+
     else
         sms = client.sms.messages.create {to, from, body: "You didn't send me a photo!"}
-
-    if req.query["MediaUrl1"]?
-        client.sms.messages.create {to, from, body: "(I saw you sent multiple photos, but I can only be turned on by one at a time. Resend the others?)"}
-
-    res.send(200)
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
