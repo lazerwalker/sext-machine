@@ -2,7 +2,12 @@ Twilio = require 'twilio'
 Express = require 'express'
 SightengineClient = require 'nudity-filter'
 
-Sightengine = new SightengineClient(process.env.SIGHTENGINE_USER, process.env.SIGHTENGINE_SECRET)
+TwilioSID = process.env.TWILIO_SID
+TwilioAuthToken = process.env.TWILIO_AUTHTOKEN
+SightEngineUser = process.env.SIGHTENGINE_USER
+SightEngineSecret = process.env.SIGHTENGINE_SECRET
+
+Sightengine = new SightengineClient(SightEngineUser, SightEngineSecret)
 
 app = Express()
 
@@ -12,7 +17,7 @@ app.get '/sms', (req, res) ->
     to = req.query.From
     from = req.query.To
 
-    client = Twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTHTOKEN)
+    client = Twilio(TwilioSID, TwilioAuthToken)
 
     if req.query["MediaUrl0"]?
         Sightengine.checkNudityForURL req.query["MediaUrl0"], (error, result) ->
