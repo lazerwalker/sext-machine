@@ -1,1 +1,1 @@
-web: coffee nudity.coffee
+web: coffee app.coffee
