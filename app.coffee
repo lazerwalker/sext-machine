@@ -50,7 +50,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
 
         sendSMS(sender, msg)
         if hasOthers
-            body = "(I saw you sent multiple photos, but I can only be turned on by one at a time. Resend the others?)"
+            msg = "(I saw you sent multiple photos, but I can only be turned on by one at a time. You should resend the others!)"
             sendSMS(sender, msg)
 
 
