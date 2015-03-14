@@ -19,6 +19,16 @@ app = Express()
 Conversation = Parse.Object.extend "Conversation"
 Pic = Parse.Object.extend "Pic"
 
+findUser = (phone, {found, notFound}) ->
+    query = new Parse.Query(Conversation);
+    query.equalTo("phone", phone)
+    query.first
+        success: (conversation) ->
+            if conversation?
+                found(conversation)
+            else
+                notFound()
+
 TwilioClient = Twilio(TwilioSID, TwilioAuthToken)
 sendSMS = (to, msg) ->
     TwilioClient.sms.messages.create({to, from:TwilioNum, body:msg})
@@ -73,23 +83,15 @@ app.get '/sms', (req, res) ->
         else
             client = Twilio(TwilioSID, TwilioAuthToken)
             sendSMS(sender, "You didn't send me a photo!")
+            # TODO: Analytics call
 
-
-    query = new Parse.Query(Conversation);
-    query.equalTo("phone", sender)
-    query.first
-      success: (conversation) ->
-        if conversation?
-            processMessage(conversation)
-        else
+    findUser sender,
+        found: (conversation) -> processMessage(conversation)
+        notFound: () ->
             conversation = new Conversation()
             conversation.save {phone: sender},
                 success: (conversation) ->
                     sendSMS(sender, "how u doin bae? ;)")
-
-      error: (error) ->
-        fail()
-
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
