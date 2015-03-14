@@ -1,6 +1,5 @@
 Twilio = require 'twilio'
 Express = require 'express'
-BodyParser = require 'body-parser'
 SightengineClient = require 'nudity-filter'
 
 Sightengine = new SightengineClient(process.env.SIGHTENGINE_USER, process.env.SIGHTENGINE_SECRET)
