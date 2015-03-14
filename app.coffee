@@ -28,6 +28,10 @@ findUser = (phone, {found, notFound}) ->
                 found(conversation)
             else
                 notFound()
+createNewUser = (phone, success) ->
+    conversation = new Conversation()
+    conversation.save {phone}, {success}
+
 
 TwilioClient = Twilio(TwilioSID, TwilioAuthToken)
 sendSMS = (to, msg) ->
@@ -88,10 +92,8 @@ app.get '/sms', (req, res) ->
     findUser sender,
         found: (conversation) -> processMessage(conversation)
         notFound: () ->
-            conversation = new Conversation()
-            conversation.save {phone: sender},
-                success: (conversation) ->
-                    sendSMS(sender, "how u doin bae? ;)")
+            createNewUser sender, (conversation) ->
+                sendSMS(sender, "how u doin bae? ;)")
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
