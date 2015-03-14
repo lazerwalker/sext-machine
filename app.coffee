@@ -6,14 +6,10 @@ SightengineClient = require 'nudity-filter'
 Sightengine = new SightengineClient(process.env.SIGHTENGINE_USER, process.env.SIGHTENGINE_SECRET)
 
 app = Express()
-app.use BodyParser.urlencoded extended:true
 
 app.get '/sms', (req, res) ->
-    if !Twilio.validateExpressRequest(req, process.env.TWILIO_AUTHTOKEN, url: "http://sextmachine.heroku.com/sms")
-        res.status(403).send("Not a valid Twilio request")
-        return
-
     console.log req.query
+
     to = req.query.From
     from = req.query.To
 
