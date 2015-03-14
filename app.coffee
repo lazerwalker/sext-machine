@@ -1,11 +1,18 @@
 Twilio = require 'twilio'
 Express = require 'express'
+BodyParser = require 'body-parser'
 SightengineClient = require 'nudity-filter'
 
 Sightengine = new SightengineClient(process.env.SIGHTENGINE_USER, process.env.SIGHTENGINE_SECRET)
 
 app = Express()
+app.use BodyParser.urlencoded()
+
 app.get '/sms', (req, res) ->
+    if !Twilio.validateExpressRequest(req, process.env.TWILIO_AUTHTOKEN)
+        res.send 403
+        return
+
     console.log req.query
     to = req.query.From
     from = req.query.To
