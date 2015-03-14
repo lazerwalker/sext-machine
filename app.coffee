@@ -9,7 +9,7 @@ app = Express()
 app.use BodyParser.urlencoded extended:true
 
 app.get '/sms', (req, res) ->
-    if !Twilio.validateExpressRequest(req, process.env.TWILIO_AUTHTOKEN)
+    if !Twilio.validateExpressRequest(req, process.env.TWILIO_AUTHTOKEN, url: "http://sextmachine.heroku.com/sms")
         res.status(403).send("Not a valid Twilio request")
         return
 
