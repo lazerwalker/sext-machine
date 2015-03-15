@@ -48,7 +48,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
             sendSMS(sender, msg)
             return
         else if result.result
-            msg = "im like #{result.confidence}% turned on rn"
+            msg = "that pic makes me like #{result.confidence}% turned on rn"
             if result.confidence <= 15
                 msg += " :/"
             else if result.confidence >= 60
