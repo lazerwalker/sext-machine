@@ -49,8 +49,8 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
             return
         else if result.result
             messages = [
-                'im like #{result.confidence}% turned on'
-                'arousal circuits at #{result.confidence}%'
+                "im like #{result.confidence}% turned on"
+                "arousal circuits at #{result.confidence}%"
             ]
             index = Math.floor(Math.random() * messages.length)
             msg = messages[index]
