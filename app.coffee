@@ -111,6 +111,7 @@ app.get '/sms', (req, res) ->
     processMessage = (conversation) ->
         image = req.query["MediaUrl0"]
         if image?
+            if image.length > 1 then image = image[0]
             hasOthers = req.query["MediaUrl1"]?
             handleImage(image, hasOthers, conversation)
         else
