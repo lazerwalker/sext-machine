@@ -48,12 +48,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
             sendSMS(sender, msg)
             return
         else if result.result
-            messages = [
-                "im like #{result.confidence}% turned on"
-                "arousal circuits at #{result.confidence}%"
-            ]
-            index = Math.floor(Math.random() * messages.length)
-            msg = messages[index]
+            msg = "im like #{result.confidence}% turned on rn"
             if result.confidence <= 15
                 msg += " :/"
             else if result.confidence >= 60
