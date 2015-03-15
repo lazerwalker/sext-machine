@@ -95,10 +95,9 @@ app.get '/sms', (req, res) ->
         found: (conversation) -> processMessage(conversation)
         notFound: () ->
             createNewUser sender, (conversation) ->
-                sendSMS(sender, "how u doin bae? ;)")
                 sendSMS(sender, "[OPERATIONS MANUAL: Using complex nudity-detection algorithms, Sext Machine is programmed to feel arousal proportional to the likelihood a photo is X-rated.")
                 sendSMS(sender, "Without sending actual explicit photos, arouse the unit by taking and sending pictures with your phone camera that it believes to contain nudity.]")
-                sendSMS(sender, "ooh, baby. send me some hot pics. i want to be so aroused that i produce lubricant at an alarming rate. <3")
+                sendSMS(sender, "how u doin bae? ;)")
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
