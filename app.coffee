@@ -54,17 +54,13 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
             ]
             index = Math.floor(Math.random() * messages.length)
             msg = messages[index]
-            if result.confidence < 10
-                msg += " :( :( :("
-            else if result.confidence < 30
-                msg += " :("
-            else if result.confidence < 40
-                msg += ' :/.'
-            else if result.confidence > 60
+            if result.confidence <= 15
+                msg += " :/"
+            else if result.confidence >= 60
                 msg += ' :)'
-            else if result.confidence > 70
+            else if result.confidence >= 70
                 msg += ' ;)'
-            else if result.confidence > 85
+            else if result.confidence >= 85
                 msg += ' :D :D :D'
         else
             messages = [
