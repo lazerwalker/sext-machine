@@ -94,6 +94,8 @@ app.get '/sms', (req, res) ->
         notFound: () ->
             createNewUser sender, (conversation) ->
                 sendSMS(sender, "how u doin bae? ;)")
+                sendSMS(sender, "[SEXT MACHINE MODEL XXX-3829 OPERATION MANUAL: Unit is an automated machine ('bot') capable of engaging in cybersex ('sexting'), and is equipped with complex nudity-detection algorithms. It has been programmed to become aroused at a rate proportional to the likelihood a photo contains nudity.")
+               sendSMS(sender, "Although sending actual explicit pics would be immoral, attempt to arouse the unit by taking pictures with your phone camera that it believes contain nudity.]")
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
