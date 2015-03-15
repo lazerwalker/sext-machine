@@ -82,6 +82,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
 
         sendSMS(sender, msg)
         if hasOthers
+            Parse.Analytics.track("uploaded multiple photos")
             msg = "(i can only be turned on by 1 pic at a tmie. send the others again ;P)"
             sendSMS(sender, msg)
 
@@ -96,6 +97,7 @@ app.get '/sms', (req, res) ->
     console.log req.query
 
     unless sender?
+        Parse.Analytics.track("invalid request", "no sender")
         fail()
         return
 
@@ -106,9 +108,8 @@ app.get '/sms', (req, res) ->
             hasOthers = req.query["MediaUrl1"]?
             handleImage(image, hasOthers, conversation)
         else
-            client = Twilio(TwilioSID, TwilioAuthToken)
+            Parse.Analytics.track("no photo")
             sendSMS(sender, "u didnt include a photo :(")
-            # TODO: Analytics call
 
     findUser sender,
         found: (conversation) -> processMessage(conversation)
