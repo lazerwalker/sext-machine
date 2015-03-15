@@ -73,6 +73,8 @@ app.get '/sms', (req, res) ->
     fail = -> res.status(500).send("An error has occured")
 
     sender = req.query.From
+    if sender.length > 1 then sender = sender[0]
+
     console.log req.query
 
     unless sender?
