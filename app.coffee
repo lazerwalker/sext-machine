@@ -64,7 +64,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
 
         sendSMS(sender, msg)
         if hasOthers
-            msg = "(I saw you sent multiple photos, but I can only be turned on by one at a time. You should resend the others!)"
+            msg = "(u sent me more than 1 photo! i can only be turned on by 1 at a tmie. send the others again ;P)"
             sendSMS(sender, msg)
 
 
@@ -88,7 +88,7 @@ app.get '/sms', (req, res) ->
             handleImage(image, hasOthers, conversation)
         else
             client = Twilio(TwilioSID, TwilioAuthToken)
-            sendSMS(sender, "You didn't send me a photo!")
+            sendSMS(sender, "u didnt include a photo :(")
             # TODO: Analytics call
 
     findUser sender,
