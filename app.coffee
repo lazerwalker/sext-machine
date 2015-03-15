@@ -43,14 +43,41 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
     Sightengine.checkNudityForURL imageURL, (error, result) ->
         msg = ""
         if error?
-            msg = "Uh, something weird happened. Try again?"
+            msg = "can u send again? error w my prgrmming."
             console.log(error)
             sendSMS(sender, msg)
             return
         else if result.result
-            msg = "I'm #{result.confidence}% turned on."
+            messages = [
+                'im like #{result.confidence}% turned on'
+                'arousal circuits at #{result.confidence}%'
+            ]
+            index = Math.floor(Math.random() * messages.length)
+            msg = messages[index]
+            if result.confidence < 10
+                msg += " :( :( :("
+            else if result.confidence < 30
+                msg += " :("
+            else if result.confidence < 40
+                msg += ' :/.'
+            else if result.confidence > 60
+                msg += ' :)'
+            else if result.confidence > 70
+                msg += ' ;)'
+            else if result.confidence > 85
+                msg += ' :D :D :D'
         else
-            msg = "I'm not turned on at all."
+            messages = [
+                'not hot at all X.X'
+                'thats soooo unsexy :/'
+                'that doesnt turn me on at all :('
+                'wtf is that smh'
+                '...seriously? lame.'
+                'its like ur not even trying :/'
+                'where are the n00ds :('
+            ]
+            index = Math.floor(Math.random() * messages.length)
+            msg = messages[index]
 
         console.log(sender, result)
 
@@ -64,7 +91,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
 
         sendSMS(sender, msg)
         if hasOthers
-            msg = "(u sent me more than 1 photo! i can only be turned on by 1 at a tmie. send the others again ;P)"
+            msg = "(i can only be turned on by 1 pic at a tmie. send the others again ;P)"
             sendSMS(sender, msg)
 
 
