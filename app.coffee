@@ -116,9 +116,12 @@ app.get '/sms', (req, res) ->
         found: (conversation) -> processMessage(conversation)
         notFound: () ->
             createNewUser sender, (conversation) ->
-                sendSMS(sender, "how u doin bae? ;)")
-                sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
-                sendSMS(sender, "[OPERATIONS MANUAL: Using nudity-detection algorithms, Sext Machine is programmed to feel arousal relative to the likelihood a photo has inappropriate content.")
+                promise = sendSMS(sender, "how u doin bae? ;)")
+                promise = promise.then ->
+                    sendSMS(sender, "[OPERATIONS MANUAL: Using nudity-detection algorithms, Sext Machine is programmed to feel arousal relative to the likelihood a photo has inappropriate content.")
+                promise = promise.then ->
+                    sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
+
             res.status(200)
 
 app.listen process.env.PORT || 3000
