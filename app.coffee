@@ -110,14 +110,16 @@ app.get '/sms', (req, res) ->
         else
             Parse.Analytics.track("no photo")
             sendSMS(sender, "u didnt include a photo :(")
+        res.status(200)
 
     findUser sender,
         found: (conversation) -> processMessage(conversation)
         notFound: () ->
             createNewUser sender, (conversation) ->
-                sendSMS(sender, "[OPERATION MANUAL: Using nudity-detection algorithms, Sext Machine is programmed to feel arousal relative to the likelihood a photo has inappropriate content.")
+                sendSMS(sender, "[OPERATIONS MANUAL: Using nudity-detection algorithms, Sext Machine is programmed to feel arousal relative to the likelihood a photo has inappropriate content.")
                 sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
                 sendSMS(sender, "how u doin bae? ;)")
+            res.status(200)
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
