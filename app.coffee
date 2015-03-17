@@ -115,7 +115,7 @@ app.get '/sms', (req, res) ->
         found: (conversation) -> processMessage(conversation)
         notFound: () ->
             createNewUser sender, (conversation) ->
-                sendSMS(sender, "[OPERATIONS MANUAL: Using complex nudity-detection algorithms, Sext Machine is programmed to feel arousal proportional to the likelihood a photo has inappropriate content.")
+                sendSMS(sender, "[OPERATION MANUAL: Using nudity-detection algorithms, Sext Machine is programmed to feel arousal relative to the likelihood a photo has inappropriate content.")
                 sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
                 sendSMS(sender, "how u doin bae? ;)")
 
