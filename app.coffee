@@ -35,11 +35,13 @@ createNewUser = (phone, success) ->
 
 TwilioClient = Twilio(TwilioSID, TwilioAuthToken)
 sendSMS = (to, msg) ->
+    console.log("sending '#{msg}' to '#{to}'")
     TwilioClient.sms.messages.create({to, from:TwilioNum, body:msg})
 
 handleImage = (imageURL, hasOthers=false, conversation) ->
     sender = conversation.get('phone')
 
+    console.log "Received image at #{imageURL}"
     Sightengine.checkNudityForURL imageURL, (error, result) ->
         msg = ""
         if error?
@@ -82,6 +84,7 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
 
         sendSMS(sender, msg)
         if hasOthers
+            console.log "Uploaded multiple photos"
             Parse.Analytics.track("uploaded multiple photos")
             msg = "(i can only be turned on by 1 pic at a tmie. send the others again ;P)"
             sendSMS(sender, msg)
@@ -92,9 +95,7 @@ app.get '/sms', (req, res) ->
     fail = -> res.status(500).send("An error has occured")
 
     sender = req.query.From
-    if sender.length > 1 then sender = sender[0]
-
-    console.log req.query
+    if Array.isArray(sender) then sender = sender[0]
 
     unless sender?
         Parse.Analytics.track("invalid request", "no sender")
