@@ -51,14 +51,14 @@ handleImage = (imageURL, hasOthers=false, conversation) ->
             return
         else if result.result
             msg = "that pic makes me like #{result.confidence}% turned on rn"
-            if result.confidence <= 15
-                msg += " :/"
-            else if result.confidence >= 60
-                msg += ' :)'
+            if result.confidence >= 85
+                msg += ' :D :D :D'
             else if result.confidence >= 70
                 msg += ' ;)'
-            else if result.confidence >= 85
-                msg += ' :D :D :D'
+            else if result.confidence >= 60
+                msg += ' :)'
+            else if result.confidence <= 15
+                msg += " :/"
         else
             messages = [
                 'not hot at all X.X'
