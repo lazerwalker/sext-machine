@@ -1,7 +1,8 @@
 Twilio = require 'twilio'
 Express = require 'express'
 SightengineClient = require 'nudity-filter'
-Parse = require('parse').Parse;
+Parse = require('parse').Parse
+AWS = require('aws-sdk')
   
 TwilioSID = process.env.TWILIO_SID
 TwilioAuthToken = process.env.TWILIO_AUTHTOKEN
@@ -15,6 +16,8 @@ Sightengine = new SightengineClient(SightEngineUser, SightEngineSecret)
 Parse.initialize(ParseAppID, ParseKey)
 
 app = Express()
+app.use('/', Express.static(__dirname + '/client'));
+
 
 Conversation = Parse.Object.extend "Conversation"
 Pic = Parse.Object.extend "Pic"
@@ -124,6 +127,31 @@ app.get '/sms', (req, res) ->
                     sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
 
             res.status(200)
+
+app.get '/sign_s3', (req, res) ->
+    AWS.config.update 
+        accessKeyId: process.env.AWS_ACCESS_KEY
+        secretAccessKey: process.env.AWS_SECRET_KEY
+
+
+    s3 = new AWS.S3()
+    params = {
+        Bucket: process.env.S3_BUCKET
+        Key: "#{req.query.fileName}-#{Date.now()}"
+        Expires: 60
+        ContentType: req.query.fileType
+        ACL: 'public-read'
+    }
+
+    s3.getSignedUrl 'putObject', params, (err, data) ->
+        console.log("Put Objet");
+        result = {
+            signedRequest: data,
+            url: "https://#{params.Bucket}.s3.amazonaws.com/#{params.Key}"
+        }
+        console.log("Producing S3 signed request '#{result.signedRequest}' for URL '#{result.url}'")
+        res.write(JSON.stringify(result))
+        res.end();
 
 app.listen process.env.PORT || 3000
 console.log "Listening on #{process.env.PORT || 3000}"
