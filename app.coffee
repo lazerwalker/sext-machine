@@ -135,19 +135,23 @@ app.get '/sign_s3', (req, res) ->
 
 
     s3 = new AWS.S3()
+
+    file = req.query.fileName.split('.')
+    extension = file.pop()
+    file = "#{file.join('.')}-#{Date.now()}.#{extension}"
+
     params = {
         Bucket: process.env.S3_BUCKET
-        Key: "#{req.query.fileName}-#{Date.now()}"
+        Key: file
         Expires: 60
         ContentType: req.query.fileType
         ACL: 'public-read'
     }
 
     s3.getSignedUrl 'putObject', params, (err, data) ->
-        console.log("Put Objet");
         result = {
             signedRequest: data,
-            url: "https://#{params.Bucket}.s3.amazonaws.com/#{params.Key}"
+            url: "https://s3.amazonaws.com/#{params.Bucket}/#{params.Key}"
         }
         console.log("Producing S3 signed request '#{result.signedRequest}' for URL '#{result.url}'")
         res.write(JSON.stringify(result))
