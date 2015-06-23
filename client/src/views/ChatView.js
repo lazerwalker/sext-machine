@@ -20,9 +20,6 @@
     componentDidUpdate: function() {
       document.body.scrollTop = document.body.scrollHeight;
     },
-    componentDidMount: function() {
-      document.body.scrollTop = document.body.scrollHeight;
-    },    
     render: function() {
       var messages = this.state.messages.map(function(msg) {
         if (msg.type === Type.BOT) {
@@ -36,7 +33,10 @@
       });
       return (
         <div>
-          {messages}
+          <HeaderView/>
+          <div className='messages'>
+            {messages}
+          </div>
           <InputView 
             onUpload={this.uploadedPhoto}
             onJudgement={this.judgedPhoto}
