@@ -135,7 +135,8 @@ app.get '/web', (req, res) ->
         image = req.query.url
         if image?
             handleImage(image, false, conversation).then (result) ->
-                res.json(result)
+                console.log("Returning result: ", result)
+                res.send(result)
         else
             Parse.Analytics.track("no photo")
             res.send("u didnt include a photo :(")

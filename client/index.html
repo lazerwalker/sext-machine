@@ -46,6 +46,14 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     console.log("Uploaded at " + url);
+                    var xhr2 = new XMLHttpRequest();
+                    xhr2.open("GET", "/web?url=" + encodeURIComponent(url));
+                    xhr2.onreadystatechange = function() {
+                        if (xhr2.readyState === 4) {
+                            alert(xhr2.responseText);
+                        }
+                    }
+                    xhr2.send();
                 }
             };
             xhr.onerror = function() {
