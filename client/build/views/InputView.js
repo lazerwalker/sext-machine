@@ -2,7 +2,9 @@
   window.InputView = React.createClass({displayName: "InputView",
     render: function() {
       return (
-      React.createElement("input", {ref: "file", type: "file", accept: "image/*", capture: "camera", onChange: this.upload})
+        React.createElement("div", {className: "footer"}, 
+          React.createElement("input", {ref: "file", type: "file", accept: "image/*", capture: "camera", onChange: this.upload})
+        )
       )
     },
     upload: function() {

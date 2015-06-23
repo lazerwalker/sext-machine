@@ -14,7 +14,13 @@ body {
 }
 
 .message {
+    padding: 5px;
+    margin: 10px;
     width: 280px;
+}
+
+.message:last-child {
+    margin-bottom: 100px;
 }
 
 .header {
@@ -30,6 +36,18 @@ body {
     z-index: 1000;
 }
 
+.footer {
+    background: #eee;
+    border-top: 0.5px solid #ccc;
+    bottom: 0px;
+    font-weight: bold;
+    line-height: 50px;
+    height: 50px;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+}
 /* Generated(ish) from http://www.ilikepixels.co.uk/drop/bubbler/ */
 
 
@@ -38,10 +56,9 @@ body {
     clear: both;
 
     position: relative;
-    padding: 5px;
     padding-left: 10px;
     background: #DDDDDD;
-    margin: 10px;
+
     -webkit-border-radius: 10px 10px 10px 8px;
     -moz-border-radius: 10px 10px 10px 8px;
     border-radius: 10px 10px 10px 8px;
@@ -64,8 +81,6 @@ body {
 .message.mine img {
     height: 100%;
     width: 100%;
-
-    margin: 0;
 
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
