@@ -3,6 +3,7 @@ Express = require 'express'
 SightengineClient = require 'nudity-filter'
 Parse = require('parse').Parse
 AWS = require('aws-sdk')
+Q = require('q')
   
 TwilioSID = process.env.TWILIO_SID
 TwilioAuthToken = process.env.TWILIO_AUTHTOKEN
@@ -44,54 +45,53 @@ sendSMS = (to, msg) ->
 handleImage = (imageURL, hasOthers=false, conversation) ->
     sender = conversation.get('phone')
 
+
     console.log "Received image at #{imageURL}"
-    Sightengine.checkNudityForURL imageURL, (error, result) ->
-        msg = ""
-        if error?
-            msg = "can u send again? error w my prgrmming."
+    return Q.ninvoke(Sightengine, "checkNudityForURL", imageURL)
+        .catch (err) ->
             console.log(error)
-            sendSMS(sender, msg)
-            return
-        else if result.result
-            msg = "that pic makes me like #{result.confidence}% turned on rn"
-            if result.confidence >= 85
-                msg += ' :D :D :D'
-            else if result.confidence >= 70
-                msg += ' ;)'
-            else if result.confidence >= 60
-                msg += ' :)'
-            else if result.confidence <= 15
-                msg += " :/"
-        else
-            messages = [
-                'not hot at all X.X'
-                'thats soooo unsexy :/'
-                'that doesnt turn me on at all :('
-                'wtf is that smh'
-                '...seriously? lame.'
-                'its like ur not even trying :/'
-                'where are the n00ds :('
-            ]
-            index = Math.floor(Math.random() * messages.length)
-            msg = messages[index]
+            return "can u send again? error w my prgrmming."
+        .then (result) ->
+            msg = ""
+            if result.result
+                msg = "that pic makes me like #{result.confidence}% turned on rn"
+                if result.confidence >= 85
+                    msg += ' :D :D :D'
+                else if result.confidence >= 70
+                    msg += ' ;)'
+                else if result.confidence >= 60
+                    msg += ' :)'
+                else if result.confidence <= 15
+                    msg += " :/"
+            else
+                messages = [
+                    'not hot at all X.X'
+                    'thats soooo unsexy :/'
+                    'that doesnt turn me on at all :('
+                    'wtf is that smh'
+                    '...seriously? lame.'
+                    'its like ur not even trying :/'
+                    'where are the n00ds :('
+                ]
+                index = Math.floor(Math.random() * messages.length)
+                msg = messages[index]
 
-        console.log(sender, result)
+            console.log(sender, result)
 
-        data =
-            url: imageURL
-            isNude: result.result
-            conversation: conversation
-            confidence: result.confidence
-        pic = new Pic()
-        pic.save(data)
+            data =
+                url: imageURL
+                isNude: result.result
+                conversation: conversation
+                confidence: result.confidence
+            pic = new Pic()
+            pic.save(data)
 
-        sendSMS(sender, msg)
-        if hasOthers
-            console.log "Uploaded multiple photos"
-            Parse.Analytics.track("uploaded multiple photos")
-            msg = "(i can only be turned on by 1 pic at a tmie. send the others again ;P)"
-            sendSMS(sender, msg)
+            if hasOthers
+                console.log "Uploaded multiple photos"
+                Parse.Analytics.track("uploaded multiple photos")
+                msg = [msg, "(i can only be turned on by 1 pic at a tmie. send the others again ;P)"]
 
+            return msg
 
 
 app.get '/sms', (req, res) ->
@@ -110,7 +110,9 @@ app.get '/sms', (req, res) ->
         if image?
             if Array.isArray(image) then image = image[0]
             hasOthers = req.query["MediaUrl1"]?
-            handleImage(image, hasOthers, conversation)
+            handleImage(image, hasOthers, conversation).then (result) ->
+                if !Array.isArray(result) then result = [result]
+                sendSMS(conversation.get('phone'), msg) for msg in result
         else
             Parse.Analytics.track("no photo")
             sendSMS(sender, "u didnt include a photo :(")
@@ -127,6 +129,22 @@ app.get '/sms', (req, res) ->
                     sendSMS(sender, "Trick the unit into being aroused by taking and sending pictures with your phone camera that aren't x-rated, but it believes are.]")
 
             res.status(200)
+
+app.get '/web', (req, res) ->
+    processMessage = (conversation) ->
+        image = req.query.url
+        if image?
+            handleImage(image, false, conversation).then (result) ->
+                res.json(result)
+        else
+            Parse.Analytics.track("no photo")
+            res.send("u didnt include a photo :(")
+
+    findUser "web",
+        found: processMessage
+        notFound: (conversation) ->
+            createNewUser "web", (conversation) ->
+                processMessage(conversation)
 
 app.get '/sign_s3', (req, res) ->
     AWS.config.update 
