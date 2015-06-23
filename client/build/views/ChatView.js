@@ -17,6 +17,12 @@
       }
       return { messages: messages }
     },
+    componentDidUpdate: function() {
+      document.body.scrollTop = document.body.scrollHeight;
+    },
+    componentDidMount: function() {
+      document.body.scrollTop = document.body.scrollHeight;
+    },    
     render: function() {
       var messages = this.state.messages.map(function(msg) {
         if (msg.type === Type.BOT) {
@@ -54,11 +60,15 @@
 
     },
     judgedPhoto: function(url, judgementString) {
-      console.log("JUDGING", judgementString)
       var messages = this.state.messages;
-      messages.push({type: Type.YOU, url:url})
-      messages.push({type: Type.BOT, msg:judgementString});
+      var newest = {type: Type.BOT, msg:judgementString};
+      messages.push(newest)
       this.setState({messages: messages})
+
+      messages.pop()
+      messages.push({type: Type.YOU, url:url})
+      messages.push(newest)
+
       localStorage.messages = JSON.stringify(messages);    
     }
   });
