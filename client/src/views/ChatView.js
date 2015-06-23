@@ -33,7 +33,6 @@
       });
       return (
         <div>
-          <HeaderView/>
           <div className='messages'>
             {messages}
           </div>

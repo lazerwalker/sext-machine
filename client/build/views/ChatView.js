@@ -33,7 +33,6 @@
       });
       return (
         React.createElement("div", null, 
-          React.createElement(HeaderView, null), 
           React.createElement("div", {className: "messages"}, 
             messages
           ), 
