@@ -52,19 +52,33 @@
       var view = this;
       reader.onload = function (e) {
         console.log("Loaded", e)
-        messages.push({type: Type.YOU, url: e.target.result});
+        messages.push({type: Type.YOU, url: e.target.result, temporary: true});
+
+        var loadingMessages = [
+          "hmmm lemme see...",
+          "wuzzat? gimme a sec...",
+          "ooh, new pic! analyzing..."
+        ]
+
+        messages.push({type: Type.BOT, msg: _.sample(loadingMessages), temporary: true})
         view.setState({messages: messages})
-        localStorage.messages = JSON.stringify(messages);
       };
       reader.readAsDataURL(file);
 
     },
     judgedPhoto: function(url, judgementString) {
       var messages = this.state.messages;
+
+      // Remove temporary
+      var last = messages.pop();
+      if (!last.temporary) messages.push(last);
+
+      // Add judgement
       var newest = {type: Type.BOT, msg:judgementString};
       messages.push(newest)
       this.setState({messages: messages})
 
+      // Add saved URL back to localstorage, then the judgement again
       messages.pop()
       messages.push({type: Type.YOU, url:url})
       messages.push(newest)
