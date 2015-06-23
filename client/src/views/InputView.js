@@ -6,13 +6,13 @@
       )
     },
     upload: function() {
-      getSignedRequest(this.refs.file.getDOMNode().files[0])
+      getSignedRequest(this.refs.file.getDOMNode().files[0], this.props.onUpload)
     }
   });
 
   // The following code gratuitously yanked from
   // https://devcenter.heroku.com/articles/s3-upload-node
-  function getSignedRequest(file){
+  function getSignedRequest(file, onUpload){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/sign_s3?fileName="+file.name+"&fileType="+file.type);
     xhr.onreadystatechange = function() {
@@ -21,7 +21,7 @@
         if(xhr.status === 200) {
           console.log("Status was 200")
           var response = JSON.parse(xhr.responseText);
-          uploadFile(file, response.signedRequest, response.url);
+          uploadFile(file, response.signedRequest, response.url, onUpload);
         } else {
           alert("Could not get signed URL.");
         }
@@ -30,7 +30,7 @@
     xhr.send();
   }
 
-  function uploadFile(file, signedRequest, url){
+  function uploadFile(file, signedRequest, url, onUpload){
     console.log("Uploading file")
     console.log(file, signedRequest, url)
     
@@ -40,6 +40,7 @@
     xhr.onload = function() {
       if (xhr.status === 200) {
         console.log("Uploaded at " + url);
+        onUpload(url);
         var xhr2 = new XMLHttpRequest();
         xhr2.open("GET", "/web?url=" + encodeURIComponent(url));
         xhr2.onreadystatechange = function() {
