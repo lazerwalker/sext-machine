@@ -1,0 +1,72 @@
+body {
+    font-family: San Francisco, Helvetica Neue, Helvetica, sans-serif;
+}
+
+.message {
+    width: 280px;
+}
+
+/* Generated(ish) from http://www.ilikepixels.co.uk/drop/bubbler/ */
+
+
+.message.theirs {
+    position: relative;
+    padding: 5px;
+    padding-left: 10px;
+    background: #DDDDDD;
+    margin: 10px;
+    -webkit-border-radius: 10px 10px 10px 8px;
+    -moz-border-radius: 10px 10px 10px 8px;
+    border-radius: 10px 10px 10px 8px;
+}
+
+.message.theirs:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 6px 5px 6px 0;
+    border-color: transparent #DDDDDD;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-top: -6px;
+    left: -5px;
+    bottom: 25%;
+}
+
+.message.mine img {
+    height: 100%;
+    width: 100%;
+
+    margin: 0;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.message.mine  {
+    float: right;
+
+    position: relative;
+    padding: 4px;
+    padding-bottom: 0;
+    background: #0085FA;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.message.mine:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 6px 0 6px 5px;
+    border-color: transparent #0085FA;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-top: -6px;
+    bottom: 25%;
+    right: -5px;
+}
