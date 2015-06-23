@@ -32,16 +32,34 @@
         React.createElement("div", null, 
           messages, 
           React.createElement(InputView, {
-            onUpload: this.uploadedPhoto}
+            onUpload: this.uploadedPhoto, 
+            onJudgement: this.judgedPhoto}
           )
         )
       )
     },
-    uploadedPhoto: function(photo) {
+    uploadedPhoto: function(file) {
       var messages = this.state.messages;
-      messages.push({type: Type.YOU, url: photo});
+      console.log("In uploadedPhoto")
+      var reader = new FileReader();
+
+      var view = this;
+      reader.onload = function (e) {
+        console.log("Loaded", e)
+        messages.push({type: Type.YOU, url: e.target.result});
+        view.setState({messages: messages})
+        localStorage.messages = JSON.stringify(messages);
+      };
+      reader.readAsDataURL(file);
+
+    },
+    judgedPhoto: function(url, judgementString) {
+      console.log("JUDGING", judgementString)
+      var messages = this.state.messages;
+      messages.push({type: Type.YOU, url:url})
+      messages.push({type: Type.BOT, msg:judgementString});
       this.setState({messages: messages})
-      localStorage.messages = JSON.stringify(messages);
+      localStorage.messages = JSON.stringify(messages);    
     }
   });
 })();

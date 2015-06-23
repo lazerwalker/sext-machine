@@ -10,6 +10,9 @@ body {
 
 
 .message.theirs {
+    float:left;
+    clear: both;
+    
     position: relative;
     padding: 5px;
     padding-left: 10px;
@@ -46,6 +49,7 @@ body {
 }
 
 .message.mine  {
+    clear: both;
     float: right;
 
     position: relative;
