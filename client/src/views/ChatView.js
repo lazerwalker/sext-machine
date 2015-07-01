@@ -68,20 +68,14 @@
     judgedPhoto: function(url, judgementString) {
       var messages = this.state.messages;
 
-      // Remove temporary
-      var last = messages.pop();
-      if (!last.temporary) messages.push(last);
+      var loadingMessage = messages.pop();
+      var temporaryImage = messages.pop();
 
       // Add judgement
-      var newest = {type: Type.BOT, msg:judgementString};
-      messages.push(newest)
-      this.setState({messages: messages})
-
-      // Add saved URL back to localstorage, then the judgement again
-      messages.pop()
       messages.push({type: Type.YOU, url:url})
-      messages.push(newest)
+      messages.push({type: Type.BOT, msg:judgementString});
 
+      this.setState({messages: messages})
       localStorage.messages = JSON.stringify(messages);    
     }
   });
